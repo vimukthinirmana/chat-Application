@@ -3,17 +3,21 @@ package controller;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -27,6 +31,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.User;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
@@ -49,9 +58,13 @@ public class ChatUiController extends Thread implements Initializable {
     public JFXTextField EmailTxtID;
     public JFXTextField phoneNoTxtID;
     public ImageView proImage;
+    public ScrollPane scrollPaneId;
 
     public boolean toggleChat = false, toggleProfile = false;
     public boolean saveControl = false;
+    public Pane optionPane;
+    public ImageView menuIconID;
+
 
     BufferedReader reader;
     PrintWriter writer;
@@ -62,7 +75,7 @@ public class ChatUiController extends Thread implements Initializable {
 
 
     public void initialize(URL location, ResourceBundle resources) {
-        backBtnID.setVisible(false);
+
         showProPic.setStroke(Color.valueOf("#90a4ae"));
         Image image;
         image = new Image("view/icon/unknown-user.png", false);
@@ -88,18 +101,35 @@ public class ChatUiController extends Thread implements Initializable {
 
     @FXML
     void addNewStage(MouseEvent event) throws IOException {
-        Stage stage = new Stage();
+        /*Stage stage = new Stage();
         stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/login.fxml"))));
         stage.setTitle("Authentication"); stage.centerOnScreen();
         stage.setResizable(false);
-        stage.show();
-    }
+        stage.show();*/
 
+        openNewWindow();
+    }
+    private void openNewWindow() {
+        try {
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(this.getClass().getResource("/view/login.fxml"));
+
+            stage.setScene(new Scene(root, 400, 600));
+            stage.setTitle("User Authentication");
+            stage.setOnCloseRequest(event -> {
+                System.exit(0);
+            });
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     void backBtnClicked(MouseEvent event) {
         paneClientDataUiID.setVisible(false);
         paneClientChatID.setVisible(true);
-        backBtnID.setVisible(false);
     }
 
     @FXML
@@ -112,12 +142,39 @@ public class ChatUiController extends Thread implements Initializable {
     }
 
     @FXML
-    void chooseImageButton(MouseEvent event) {}
+    void chooseImageButton(MouseEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Image");
+        this.filePath = fileChooser.showOpenDialog(stage);
+//        fileChoosePath.setText(filePath.getPath());
+        saveControl = true;
+    }
 
     @FXML
-    void faceIconMouseClicked(MouseEvent event) {
-//emoji sent option
+    void faceIconMouseClicked(MouseEvent event) throws AWTException {
+        // Create a Robot instance
+        Robot robot = new Robot();
+
+        // Simulate Windows key + ; key press
+        robot.keyPress(KeyEvent.VK_WINDOWS);
+        robot.keyPress(KeyEvent.VK_SEMICOLON);
+        robot.keyRelease(KeyEvent.VK_SEMICOLON);
+        robot.keyRelease(KeyEvent.VK_WINDOWS);
+
+        // Delay to allow time for the key combination to take effect
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Simulate mouse click
+        robot.mousePress(InputEvent.BUTTON1_MASK);
+        robot.mouseRelease(InputEvent.BUTTON1_MASK);
+
     }
+
 
     @Override
     public void run() {
@@ -194,7 +251,7 @@ public class ChatUiController extends Thread implements Initializable {
 
                 } else {
                     //For the Text
-                    text.setFill(Color.WHITE);
+                    text.setFill(Color.BLACK);
                     text.getStyleClass().add("message");
                     TextFlow tempFlow = new TextFlow();
 
@@ -229,7 +286,7 @@ public class ChatUiController extends Thread implements Initializable {
                         hBox.getChildren().add(flow);
 
                     } else {
-                        text.setFill(Color.WHITE);
+                        text.setFill(Color.BLACK);
                         tempFlow.getStyleClass().add("tempFlow");
                         flow.getStyleClass().add("textFlow");
 
@@ -251,6 +308,23 @@ public class ChatUiController extends Thread implements Initializable {
         paneClientChatID.setVisible(false);
         paneClientDataUiID.setVisible(true);
         backBtnID.setVisible(true);
+
+        setProfile();
+    }
+
+    public void setProfile() {
+        for (User user : users) {
+            if (LoginController.username.equalsIgnoreCase(user.name)) {
+                userNameTxtID.setText(user.name);
+                userNameTxtID.setVisible(true);
+                phoneNoTxtID.setText(user.phoneNo);
+                phoneNoTxtID.setVisible(true);
+                EmailTxtID.setText(user.email);
+                EmailTxtID.setVisible(true);
+                PasswordTxtID.setText(user.password);
+                PasswordTxtID.setVisible(true);
+            }
+        }
     }
 
     @FXML
@@ -265,15 +339,24 @@ public class ChatUiController extends Thread implements Initializable {
     void showPasswordIconClick(MouseEvent event) {}
 
 
-    public void saveBtnOnAction(ActionEvent actionEvent) {}
+    public void saveBtnOnAction(ActionEvent actionEvent) {
+        if (saveControl) {
+            try {
+                BufferedImage bufferedImage = ImageIO.read(filePath);
+                Image image = SwingFXUtils.toFXImage(bufferedImage, null);
+                proImage.setImage(image);
+                showProPic.setFill(new ImagePattern(image));
+                saveControl = false;
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
 
 
     public void send() {
         msg = msgFieldID.getText();
         writer.println(LoginController.username + ": " + msg);
-
-       /* msgRoom.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        msgRoom.appendText("Me: " + msg + "\n");*/
 
 
         msgFieldID.setText("");
@@ -283,5 +366,29 @@ public class ChatUiController extends Thread implements Initializable {
     }
 
 
+    public void sendMessageByKey(javafx.scene.input.KeyEvent keyEvent) {
+        if (keyEvent.getCode().toString().equals("ENTER")) {
+            send();
+        }
+    }
 
+    public void showProfile(MouseEvent mouseEvent) {
+        paneClientChatID.setVisible(false);
+        paneClientDataUiID.setVisible(true);
+    }
+
+    public void exitApplication(MouseEvent mouseEvent) {
+        System.exit(0);
+    }
+
+    public void manuIcon(MouseEvent event) {
+//        optionPane.setVisible(true);
+        if (event.getButton() == MouseButton.PRIMARY) { // Check for left mouse button click
+            if (optionPane.isVisible()) {
+                optionPane.setVisible(false);
+            } else {
+                optionPane.setVisible(true);
+            }
+        }
+    }
 }

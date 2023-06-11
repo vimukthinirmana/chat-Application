@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,124 +19,193 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatUiController">
    <children>
-      <Pane prefHeight="60.0" prefWidth="420.0" style="-fx-background-color: #7F00FF;">
+      <Pane fx:id="paneClientChatID" prefHeight="540.0" prefWidth="420.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="clientNameID" layoutX="75.0" layoutY="10.0" prefHeight="35.0" prefWidth="130.0" text="userName" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Circle fx:id="showProPic" fill="DODGERBLUE" layoutX="30.0" layoutY="30.0" onMouseClicked="#handleProfileBtn" radius="25.0" stroke="BLACK" strokeType="INSIDE">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Circle>
-            <ImageView fx:id="backBtnID" fitHeight="40.0" fitWidth="40.0" layoutX="310.0" layoutY="10.0" onMouseClicked="#backBtnClicked" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@icon/left-arrow.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <ImageView fx:id="addUsers" fitHeight="40.0" fitWidth="40.0" layoutX="374.0" layoutY="10.0" onMouseClicked="#addNewStage" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@icon/new-contact.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <Pane fx:id="paneClientChatID" layoutY="60.0" prefHeight="540.0" prefWidth="420.0">
+            <ScrollPane fx:id="scrollPaneId" layoutY="60.0" prefHeight="470.0" prefWidth="420.0" styleClass="scrollPane" stylesheets="@css/style.css">
+               <content>
+                  <VBox fx:id="vBoxID" alignment="TOP_CENTER" prefHeight="470.0" prefWidth="400.0" styleClass="vbox" stylesheets="@css/style.css" />
+               </content>
+            </ScrollPane>
+            <Pane layoutY="530.0" prefHeight="70.0" prefWidth="420.0">
                <children>
-                  <ScrollPane prefHeight="470.0" prefWidth="420.0">
-                     <content>
-                        <VBox fx:id="vBoxID" prefHeight="446.0" prefWidth="358.0" />
-                     </content>
-                  </ScrollPane>
-                  <Pane layoutY="470.0" prefHeight="70.0" prefWidth="420.0">
-                     <children>
-                        <TextField fx:id="msgFieldID" layoutX="8.0" layoutY="18.0" prefHeight="35.0" prefWidth="346.0" promptText="Message" style="-fx-background-radius: 15;" />
-                        <Circle fill="#7f00ff" layoutX="382.0" layoutY="38.0" radius="19.0" stroke="WHITE" strokeType="INSIDE" />
-                        <ImageView fitHeight="21.0" fitWidth="21.0" layoutX="373.0" layoutY="28.0" onMouseClicked="#handleSendEvent" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icon/send-message.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                        <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="327.0" layoutY="27.0" onMouseClicked="#faceIconMouseClicked" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icon/happy-face.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                        <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="300.0" layoutY="25.0" onMouseClicked="#cameraIconMouseClicked" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icon/camera.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </children>
-                  </Pane>
+                  <TextField fx:id="msgFieldID" layoutX="8.0" layoutY="18.0" onKeyPressed="#sendMessageByKey" prefHeight="35.0" prefWidth="346.0" promptText="Message" style="-fx-background-radius: 15;" />
+                  <Circle fill="#7f00fff0" layoutX="382.0" layoutY="38.0" radius="19.0" stroke="WHITE" strokeType="INSIDE" />
+                  <ImageView fitHeight="21.0" fitWidth="21.0" layoutX="373.0" layoutY="28.0" onMouseClicked="#handleSendEvent" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icon/send-message.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="327.0" layoutY="27.0" onMouseClicked="#faceIconMouseClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icon/happy-face.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="300.0" layoutY="25.0" onMouseClicked="#cameraIconMouseClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icon/camera.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="paneClientDataUiID" layoutY="60.0" prefHeight="540.0" prefWidth="420.0" visible="false">
+            <Pane prefHeight="60.0" prefWidth="420.0" style="-fx-background-color: #7F00FF;">
                <children>
-                  <JFXTextField fx:id="userNameTxtID" focusColor="#7f00ff" layoutX="85.0" layoutY="265.0" prefHeight="25.0" prefWidth="231.0" promptText="User Name" />
-                  <JFXPasswordField fx:id="PasswordTxtID" focusColor="#7f00ff" layoutX="85.0" layoutY="415.0" prefHeight="25.0" prefWidth="231.0" promptText="password" />
-                  <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="55.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icon/user.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="55.0" layoutY="415.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icon/key.png" />
-                     </image>
-                  </ImageView>
-                  <JFXButton buttonType="RAISED" layoutX="90.0" layoutY="485.0" onAction="#signUpBtnOnAction" prefHeight="36.0" prefWidth="231.0" style="-fx-background-color: #7F00FF; -fx-background-radius: 20;" text="save" textFill="WHITE">
+                  <Label fx:id="clientNameID" layoutX="75.0" layoutY="10.0" prefHeight="35.0" prefWidth="130.0" text="userName" textFill="WHITE">
                      <font>
-                        <Font size="19.0" />
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Circle fx:id="showProPic" fill="DODGERBLUE" layoutX="30.0" layoutY="30.0" onMouseClicked="#handleProfileBtn" radius="25.0" stroke="BLACK" strokeType="INSIDE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Circle>
+                  <ImageView fx:id="menuIconID" fitHeight="40.0" fitWidth="40.0" layoutX="374.0" layoutY="10.0" onMouseClicked="#manuIcon" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icon/main-menu.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane fx:id="optionPane" layoutX="259.0" layoutY="50.0" prefHeight="180.0" prefWidth="160.0" style="-fx-background-radius: 8; -fx-background-color: white; " visible="false">
+               <effect>
+                  <DropShadow />
+               </effect>
+               <children>
+                  <Label layoutX="35.0" layoutY="18.0" onMouseClicked="#addNewStage" prefHeight="27.0" prefWidth="118.0" text="New Contact">
+                     <font>
+                        <Font name="Arial" size="18.0" />
                      </font>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
-                  </JFXButton>
-                  <ImageView fx:id="passwordIconID" fitHeight="20.0" fitWidth="20.0" layoutX="296.0" layoutY="419.0" onMouseClicked="#showPasswordIconClick" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icon/hide-eye.png" />
-                     </image>
+                  </Label>
+                  <Label layoutX="35.0" layoutY="55.0" onMouseClicked="#showProfile" prefHeight="27.0" prefWidth="80.0" text="Profile">
+                     <font>
+                        <Font name="Arial" size="18.0" />
+                     </font>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
-                  </ImageView>
-                  <JFXTextField fx:id="EmailTxtID" focusColor="#7f00ff" layoutX="85.0" layoutY="315.0" prefHeight="25.0" prefWidth="231.0" promptText="email" />
-                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="55.0" layoutY="315.0" pickOnBounds="true" preserveRatio="true">
+                  </Label>
+                  <Label layoutX="35.0" layoutY="90.0" onMouseClicked="#showProfile" prefHeight="27.0" prefWidth="80.0" text="Settings">
+                     <font>
+                        <Font name="Arial" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+                  <Label layoutX="35.0" layoutY="122.0" onMouseClicked="#exitApplication" prefHeight="27.0" prefWidth="80.0" text="Exit">
+                     <font>
+                        <Font name="Arial" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+                  <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="8.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icon/gmail.png" />
+                        <Image url="@icon/newcontact-gray.png" />
                      </image>
                   </ImageView>
-                  <JFXTextField fx:id="phoneNoTxtID" focusColor="#7f00ff" layoutX="85.0" layoutY="365.0" prefHeight="25.0" prefWidth="231.0" promptText="phone Number" />
-                  <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="55.0" layoutY="365.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="8.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icon/phone.png" />
+                        <Image url="@icon/user-gray.png" />
                      </image>
                   </ImageView>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="150.0" layoutX="138.0" layoutY="82.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" width="150.0" />
-                  <ImageView fx:id="proImage" fitHeight="148.0" fitWidth="148.0" layoutX="139.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="8.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icon/user.png" />
+                        <Image url="@icon/gear.png" />
                      </image>
                   </ImageView>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7f00ff" height="35.0" layoutX="270.0" layoutY="215.0" stroke="BLACK" strokeLineJoin="ROUND" width="35.0" />
-                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="273.0" layoutY="217.0" onMouseClicked="#chooseImageButton" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="8.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icon/camera-white.png" />
+                        <Image url="@icon/switch.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Pane fx:id="paneClientDataUiID" prefHeight="540.0" prefWidth="420.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXTextField fx:id="userNameTxtID" focusColor="#7f00ff" layoutX="85.0" layoutY="265.0" prefHeight="25.0" prefWidth="231.0" promptText="User Name" />
+            <JFXPasswordField fx:id="PasswordTxtID" focusColor="#7f00ff" layoutX="85.0" layoutY="415.0" prefHeight="25.0" prefWidth="231.0" promptText="password" />
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="55.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icon/user.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="55.0" layoutY="415.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icon/key.png" />
+               </image>
+            </ImageView>
+            <JFXButton buttonType="RAISED" layoutX="90.0" layoutY="474.0" onAction="#saveBtnOnAction" prefHeight="36.0" prefWidth="231.0" style="-fx-background-color: #7F00FF; -fx-background-radius: 20;" text="save" textFill="WHITE">
+               <font>
+                  <Font size="19.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </JFXButton>
+            <ImageView fx:id="passwordIconID" fitHeight="20.0" fitWidth="20.0" layoutX="296.0" layoutY="419.0" onMouseClicked="#showPasswordIconClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icon/hide-eye.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <JFXTextField fx:id="EmailTxtID" focusColor="#7f00ff" layoutX="85.0" layoutY="315.0" prefHeight="25.0" prefWidth="231.0" promptText="email" />
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="55.0" layoutY="315.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icon/gmail.png" />
+               </image>
+            </ImageView>
+            <JFXTextField fx:id="phoneNoTxtID" focusColor="#7f00ff" layoutX="85.0" layoutY="365.0" prefHeight="25.0" prefWidth="231.0" promptText="phone Number" />
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="55.0" layoutY="365.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icon/phone.png" />
+               </image>
+            </ImageView>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="150.0" layoutX="138.0" layoutY="82.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" width="150.0" />
+            <ImageView fx:id="proImage" fitHeight="148.0" fitWidth="148.0" layoutX="139.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icon/unknown-user.png" />
+               </image>
+            </ImageView>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7f00ff" height="35.0" layoutX="270.0" layoutY="215.0" stroke="BLACK" strokeLineJoin="ROUND" width="35.0" />
+            <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="273.0" layoutY="217.0" onMouseClicked="#chooseImageButton" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icon/camera-white.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <Pane prefHeight="60.0" prefWidth="420.0" style="-fx-background-color: #7F00FF;">
+               <children>
+                  <Label layoutX="170.0" layoutY="11.0" prefHeight="36.0" prefWidth="80.0" text="Profile" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="backBtnID" fitHeight="35.0" fitWidth="35.0" layoutX="9.0" layoutY="11.0" onMouseClicked="#backBtnClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icon/left-arrow.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="HAND" />

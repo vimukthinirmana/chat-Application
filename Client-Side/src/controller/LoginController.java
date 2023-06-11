@@ -16,6 +16,8 @@ import model.User;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.sun.deploy.uitoolkit.ToolkitStore.dispose;
+
 public class LoginController {
 
     public Pane loginPaneID;
@@ -41,7 +43,10 @@ public class LoginController {
         loginNotifierID.setVisible(false);
     }
 
-    public void cancelOnClick(MouseEvent event) {}
+    public void cancelOnClick(MouseEvent event) throws Exception {
+        dispose();
+//        System.exit(0);
+    }
 
 
     public void loginBtnOnAction(ActionEvent event) {
@@ -91,11 +96,16 @@ public class LoginController {
                     newUser.phoneNo = signUpPhoneNumberTxtID.getText();
 
                     users.add(newUser);
-                    signUpNotficationID.setVisible(false);
+                    signUpNotficationID.setVisible(true);
+                    signUpNotficationID.setStyle("-fx-text-fill: green;");
+                    signUpNotficationID.setText("Registration Successfully");
                     makeDefault();
 
 
                 }
+            }else {
+                signUpNotficationID.setStyle("-fx-text-fill: red;");
+                signUpNotficationID.setText("Registration UnSuccessfully \nplease check your Data");
             }
         }
     }
